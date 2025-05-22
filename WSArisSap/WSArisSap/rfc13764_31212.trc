@@ -1,0 +1,52 @@
+
+**** Trace file opened at 2025-05-22 10:10:23.170643 UTC-05:00 (Hora est. Pacífico, Sudamérica), Encoding UTF-8
+NW RFC Library: Kernel variant, Release 750 Patch Level 11
+Compilation date          : Jan 25 2023 01:21:13
+CPIC library              : 753.2022.12.23 version 3
+NI library                : 40
+Kernel Release            : 753 Patch Level 1116
+Current working directory : D:\IntegracionSapAris\APIS\WSArisSap\WSArisSap
+Program                   : WSArisSap
+User                      : aldair.terrel
+Hardware                  : PC with Windows NT 8x AMD64 Level 6 (Mod 140 Step 1)
+Operating_system          : Windows NT 10.0
+Hostname                  : CLRLAP122
+IP address                : 192.168.18.30
+IPv6 address              : fe80::8b0f:a1b0:262a:c268
+Global trace level        : 0
+
+>> Passed parameters
+	ASHOST: 10.45.4.163
+	CLIENT: 200
+	LANG: ES
+	PASSWD: (- secret -)
+	POOL_SIZE: 5
+	SYSNR: 01
+	TRACE: 8
+	USER: USU_INTEGRAC
+<< Passed parameters
+
+
+>> RfcOptions
+	Partner Char Size: 1
+	Client: 200
+	User: USU_INTEGRAC
+	Passwd: (- secret -)
+	Language: S
+	SysNr: 01
+	ASHost: 10.45.4.163
+	Codepage: 1100
+	Trace: 32767
+	LogonCheck: 1
+	CompressionType: 1
+	Serialization: 0
+	Ignore Char Conv Errors: 0
+	Substitution Char: 35
+	UseRoundtripOptimization: Off
+	Delta Manager: 1
+<< RfcOptions
+
+2025-05-22 10:10:23.173112 [31212] 	>> RfcOptions::determineType
+determined type RFC_CLIENT
+2025-05-22 10:10:23.173335 [31212] 	<< RfcOptions::determineType returned 0
+
