@@ -12,7 +12,7 @@ namespace WSpruebaArisSap.Controllers
     [Route("api")]
     public class RegistroMermaAlmacenProdController : ControllerBase
     {
-        public class NotConsOiItems
+        public class RegistroMermaItems
         {
             public string MATNR { get; set; }
             public string WERKS { get; set; }
@@ -31,7 +31,7 @@ namespace WSpruebaArisSap.Controllers
             public string EBELN { get; set; }
             public string UARIS_CREA { get; set; }
             public string UARIS_MOD { get; set; }
-            public List<NotConsOiItems> Items { get; set; }
+            public List<RegistroMermaItems> Items { get; set; }
         }
 
         private readonly IConfiguration _configuration;
@@ -46,7 +46,7 @@ namespace WSpruebaArisSap.Controllers
         {
             if (request == null)
             {
-                return BadRequest(new { Error = "El cuerpo de la solicitud no puede estar vacío." });
+                return BadRequest(new { Error = "El c<uerpo de la solicitud no puede estar vacío." });
             }
 
             string basePath = Path.Combine(AppContext.BaseDirectory, "Recursos");
@@ -85,10 +85,9 @@ namespace WSpruebaArisSap.Controllers
                     }
 
                     var result = await context.CallFunction("ZMM_FM_GEN_MIGO_PED",
-                        Input: f => f
-                            .SetField("I_MIGO_PED_IMP", iMigoPedImp)
-                            .SetField("I_MIGO_MERMAS", iMigoMermas)
-                            .SetStructure("ES_CABECERA_MIGO", s => s
+                        Input: f => f.SetField("I_MIGO_PED_IMP", iMigoPedImp)
+                                     .SetField("I_MIGO_MERMAS", iMigoMermas)
+                                .SetStructure("ES_CABECERA_MIGO", s => s
                                 .SetField("BUDAT", DateTime.ParseExact(budat, "dd.MM.yyyy", null))
                                 .SetField("BLDAT", DateTime.ParseExact(bldat, "dd.MM.yyyy", null))
                                 .SetField("EBELN", ebeln)
@@ -96,7 +95,7 @@ namespace WSpruebaArisSap.Controllers
                                 .SetField("UARIS_MOD", uarisMod))
                             .SetTable("T_DETALLE_MIGO", request.Items,
                                 (structure, item) => structure
-                                    .SetField("MATNR", item.MATNR)
+                                    .SetField("MATNR", string.IsNullOrWhiteSpace(item.MATNR) ? "" : "0000000000" + item.MATNR)
                                     .SetField("WERKS", item.WERKS)
                                     .SetField("LGORT", item.LGORT)
                                     .SetField("CHARG", item.CHARG)

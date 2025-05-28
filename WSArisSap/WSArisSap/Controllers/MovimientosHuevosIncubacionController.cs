@@ -25,16 +25,16 @@ public class MovimientosHuevosIncubacionController : ControllerBase
 
     [HttpPost("MovimientosHuevosIncubacion")]
     public async Task<IActionResult> MovimientosHuevosIncubacion(
-        string MATNR = "",
-        string WERKS = "",
-        string PLWERK = "",
-        string VERID = "",
-        string BUDAT = "",
-        string BLDAT = "",
-        string REFMG = "",
-        string ERFME = "",
-        string USER_CREA_ARIS = "",
-        string USER_MODIF_ARIS = "",
+        string MATNR_1 = "",
+        string WERKS_1 = "",
+        string PLWERK_1 = "",
+        string VERID_1 = "",
+        string BUDAT_1 = "",
+        string BLDAT_1 = "",
+        string REFMG_1 = "",
+        string ERFME_1 = "",
+        string USER_CREA_ARIS_1 = "",
+        string USER_MODIF_ARIS_1 = "",
         string matnr = "",
         string werks = "",
         string lgort = "",
@@ -65,16 +65,16 @@ public class MovimientosHuevosIncubacionController : ControllerBase
         {
             try
             {
-                MATNR = string.IsNullOrEmpty(MATNR) ? "" : MATNR;
-                WERKS = string.IsNullOrEmpty(WERKS) ? "" : WERKS;
-                PLWERK = string.IsNullOrEmpty(PLWERK) ? "" : PLWERK;
-                VERID = string.IsNullOrEmpty(VERID) ? "" : VERID;
-                BUDAT = string.IsNullOrEmpty(BUDAT) ? "" : BUDAT;
-                BLDAT = string.IsNullOrEmpty(BLDAT) ? "" : BLDAT;
-                REFMG = string.IsNullOrEmpty(REFMG) ? "" : REFMG;
-                ERFME = string.IsNullOrEmpty(ERFME) ? "" : ERFME;
-                USER_CREA_ARIS = string.IsNullOrEmpty(USER_CREA_ARIS) ? "" : USER_CREA_ARIS;
-                USER_MODIF_ARIS = string.IsNullOrEmpty(USER_MODIF_ARIS) ? "" : USER_MODIF_ARIS;
+                MATNR_1 = string.IsNullOrEmpty(MATNR_1) ? "" : MATNR_1;
+                WERKS_1 = string.IsNullOrEmpty(WERKS_1) ? "" : WERKS_1;
+                PLWERK_1 = string.IsNullOrEmpty(PLWERK_1) ? "" : PLWERK_1;
+                VERID_1 = string.IsNullOrEmpty(VERID_1) ? "" : VERID_1;
+                BUDAT_1 = string.IsNullOrEmpty(BUDAT_1) ? "" : BUDAT_1;
+                BLDAT_1 = string.IsNullOrEmpty(BLDAT_1) ? "" : BLDAT_1;
+                REFMG_1 = string.IsNullOrEmpty(REFMG_1) ? "" : REFMG_1;
+                ERFME_1 = string.IsNullOrEmpty(ERFME_1) ? "" : ERFME_1;
+                USER_CREA_ARIS_1 = string.IsNullOrEmpty(USER_CREA_ARIS_1) ? "" : USER_CREA_ARIS_1;
+                USER_MODIF_ARIS_1 = string.IsNullOrEmpty(USER_MODIF_ARIS_1) ? "" : USER_MODIF_ARIS_1;
                 matnr = string.IsNullOrEmpty(matnr) ? "" : matnr;
                 werks = string.IsNullOrEmpty(werks) ? "" : werks;
                 lgort = string.IsNullOrEmpty(lgort) ? "" : lgort;
@@ -97,19 +97,17 @@ public class MovimientosHuevosIncubacionController : ControllerBase
 
                     };
                 var result = await context.CallFunction("ZPP_FM_NOTIF_CONS_ORDEN_FAB", // Ajusta el nombre si es diferente
-                    Input: f => f
-                        .SetStructure("IST_ORDER_FAB", s => s
-                            .SetField("MATNR", MATNR)
-                            .SetField("WERKS", WERKS)
-                            .SetField("PLWERK", PLWERK)
-                            .SetField("VERID", VERID)
-                            .SetField("BUDAT", DateTime.ParseExact(BUDAT, "dd.MM.yyyy", null))
-                            .SetField("BLDAT", DateTime.ParseExact(BLDAT, "dd.MM.yyyy", null))
-                            .SetField("REFMG", string.IsNullOrWhiteSpace(REFMG) ? 0.000m : Convert.ToDecimal(REFMG, System.Globalization.CultureInfo.InvariantCulture))
-                            .SetField("ERFME", ERFME)
-                            .SetField("USER_CREA_ARIS", USER_CREA_ARIS)
-                            .SetField("USER_MODIF_ARIS", USER_MODIF_ARIS)
-                        )
+                    Input: f => f.SetStructure("IST_ORDER_FAB", s => s
+                            .SetField("MATNR", MATNR_1)
+                            .SetField("WERKS", WERKS_1)
+                            .SetField("PLWERK", PLWERK_1)
+                            .SetField("VERID", VERID_1)
+                            .SetField("BUDAT", DateTime.ParseExact(BUDAT_1, "dd.MM.yyyy", null))
+                            .SetField("BLDAT", DateTime.ParseExact(BLDAT_1, "dd.MM.yyyy", null))
+                            .SetField("REFMG", string.IsNullOrWhiteSpace(REFMG_1) ? 0.000m : Convert.ToDecimal(REFMG_1, System.Globalization.CultureInfo.InvariantCulture))
+                            .SetField("ERFME", ERFME_1 == "UN" ? "ST" : ERFME_1)
+                            .SetField("USER_CREA_ARIS", USER_CREA_ARIS_1)
+                            .SetField("USER_MODIF_ARIS", USER_MODIF_ARIS_1))
                         .SetTable("IT_COMPONENTS", items,
                                     (structure, items) => structure
                             .SetField("MATNR", items.MATNR)
@@ -117,8 +115,7 @@ public class MovimientosHuevosIncubacionController : ControllerBase
                             .SetField("LGORT", items.LGORT)
                             .SetField("CHARG", items.CHARG)
                             .SetField("ENTRY_QNT", string.IsNullOrWhiteSpace(items.ENTRY_QNT) ? 0.000m : Convert.ToDecimal(items.ENTRY_QNT, System.Globalization.CultureInfo.InvariantCulture))
-                            .SetField("ENTRY_UOM", items.ENTRY_UOM)
-                        ),
+                            .SetField("ENTRY_UOM", items.ENTRY_UOM == "UN" ? "ST" : items.ENTRY_UOM)),
                     Output: f => (
                         from E_NUMB_NOTIF in f.GetField<string>("E_NUMB_NOTIF")
                         from E_DOC_MATNR in f.GetField<string>("E_DOC_MATNR")

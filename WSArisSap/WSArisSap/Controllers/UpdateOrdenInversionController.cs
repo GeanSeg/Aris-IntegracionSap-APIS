@@ -26,7 +26,7 @@ namespace WSpruebaArisSap.Controllers
         }
 
         [HttpGet("UpdateOrdenInversionController")]
-        public async Task<IActionResult> GetUpdateOrdenInversion(string I_ORDERID, string I_FEC_CTEC, string I_CTEC="",string I_ANUL="",string I_CERR="", string I_REAP="")
+        public async Task<IActionResult> GetUpdateOrdenInversion( string I_CTEC="",string I_ANUL="",string I_CERR="", string I_REAP="", string I_ORDERID="", string I_FEC_CTEC="")
         {
             string basePath = Path.Combine(AppContext.BaseDirectory, "Recursos");
             NativeLibrary.Load(Path.Combine(basePath, "icuuc50.dll"));
@@ -39,7 +39,7 @@ namespace WSpruebaArisSap.Controllers
                 {"client", "200"},
                 {"user", "USU_INTEGRAC"},
                 {"passwd","Rocio*25"},
-                {"lang", "EN"}
+                {"lang", "ES"}
             };
 
             var connectionBuilder = new ConnectionBuilder(settings);
@@ -54,14 +54,15 @@ namespace WSpruebaArisSap.Controllers
                     I_ANUL = string.IsNullOrEmpty(I_ANUL) ? "" : I_ANUL;
                     I_CERR = string.IsNullOrEmpty(I_CERR) ? "" : I_CERR;
                     I_REAP = string.IsNullOrEmpty(I_REAP) ? "" : I_REAP;
-
+                    I_ORDERID = string.IsNullOrEmpty(I_ORDERID) ? "" : I_ORDERID;
+                    I_FEC_CTEC = string.IsNullOrEmpty(I_FEC_CTEC) ? "" : I_FEC_CTEC;
                     var result = await context.CallFunction("ZCO_FM_UPDATE_STATUS_ORDEN_INV",
                         Input: f => f
                                         .SetField("I_CTEC", I_CTEC)
                                         .SetField("I_CERR", I_CERR)
                                         .SetField("I_REAP", I_REAP)
                                         .SetField("I_ORDERID", I_ORDERID)
-                                        .SetField("I_FEC_CTEC", DateTime.ParseExact(I_FEC_CTEC, "dd.MM.yyyy", null))
+                                        .SetField("I_FEC_CTEC", string.IsNullOrEmpty(I_FEC_CTEC) ? default(DateTime) : DateTime.ParseExact(I_FEC_CTEC, "dd.MM.yyyy", System.Globalization.CultureInfo.InvariantCulture))
                                         .SetField("I_ANUL", I_ANUL),
                                    
                         Output: f => f
