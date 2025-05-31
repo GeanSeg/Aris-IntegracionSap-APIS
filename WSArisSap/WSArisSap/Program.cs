@@ -25,8 +25,6 @@ builder.Services.AddTransient<SapResultadoPedido>();
 builder.Services.AddTransient<SapResultadoEntrega>();
 builder.Services.AddTransient<SapResultadoFactura>();
 
-
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
