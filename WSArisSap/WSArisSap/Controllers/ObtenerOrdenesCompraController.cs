@@ -139,7 +139,7 @@ namespace WSpruebaArisSap.Controllers
                             MATNR,
                             TXZ01,
                             MENGE,
-                            MEINS,
+                            MEINS = MEINS == "ST" ? "UN" : MEINS,
                             LPEIN,
                             EINDT,
                             NETPR,

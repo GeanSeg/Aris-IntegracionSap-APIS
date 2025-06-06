@@ -18,13 +18,13 @@
 
   <ItemGroup>
     <Reference Include="rscp4n">
-      <HintPath>..\WSpruebaArisSap\Recursos\rscp4n.dll</HintPath>
+      <HintPath>..\WSArisSap\Recursos\rscp4n.dll</HintPath>
     </Reference>
     <Reference Include="sapnco">
-      <HintPath>..\WSpruebaArisSap\Recursos\sapnco.dll</HintPath>
+      <HintPath>..\WSArisSap\Recursos\sapnco.dll</HintPath>
     </Reference>
     <Reference Include="sapnwrfc">
-      <HintPath>..\WSpruebaArisSap\Recursos\sapnwrfc.dll</HintPath>
+      <HintPath>..\WSArisSap\Recursos\sapnwrfc.dll</HintPath>
     </Reference>
   </ItemGroup>
 

@@ -49,9 +49,45 @@ namespace WSpruebaArisSap.Controllers
             _configuration = configuration;
         }
 
+        private string FormatMatnr(string matnrInput)
+        {
+            const int matnrLength = 18;
+
+            // Si el valor es nulo o vacío, devolver cadena vacía
+            if (string.IsNullOrWhiteSpace(matnrInput))
+            {
+                return "";
+            }
+
+            // Limpiar espacios en blanco
+            string trimmedMatnr = matnrInput.Trim();
+
+            // Verificar si el valor comienza con una letra
+            if (char.IsLetter(trimmedMatnr[0]))
+            {
+               
+                return trimmedMatnr;
+            }
+
+            // Verificar si el valor es numérico
+            if (trimmedMatnr.All(char.IsDigit))
+            {
+                // Formatear con ceros a la izquierda hasta 18 caracteres
+                string formattedMatnr = trimmedMatnr.PadLeft(matnrLength, '0');
+             
+                return formattedMatnr;
+            }
+
+            // Si no es numérico ni comienza con letra, devolver tal cual con log de advertencia
+         
+            return trimmedMatnr;
+        }
+
         [HttpPost("NotificacionConsumoProduccionController")]
         public async Task<IActionResult> CreateNotificacionConsumoProduccion([FromBody] NotConsPRDOiRequest request)
+
         {
+            
             if (request == null)
             {
                 return BadRequest(new { Error = "El cuerpo de la solicitud no puede estar vacío." });
@@ -119,7 +155,7 @@ namespace WSpruebaArisSap.Controllers
                         Input: f => f
                             .SetField("E_TYPE_NOTIF", eTypeNotif)
                             .SetStructure("ES_FLUSHDATAGEN", s => s
-                                .SetField("MATNR", matnr)
+                                .SetField("MATNR", FormatMatnr(matnr))
                                 .SetField("WERKS", werks)
                                 .SetField("PLWERK", plwerk)
                                 .SetField("LGORT", lgort)
@@ -132,7 +168,7 @@ namespace WSpruebaArisSap.Controllers
                                 .SetField("UARIS_CREA", uarisCrea)
                                 .SetField("UARIS_MOD", uarisMod))
                             .SetTable("IT_GOODSMOVEMENT", request.Items, (structure, item) => structure
-                                .SetField("MATNR", item.MATNR)
+                                .SetField("MATNR", FormatMatnr(item.MATNR))
                                 .SetField("WERKS", item.WERKS)
                                 .SetField("LGORT", item.LGORT)
                                 .SetField("CHARG", item.CHARG)
