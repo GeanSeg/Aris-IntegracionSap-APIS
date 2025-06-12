@@ -65,10 +65,10 @@ namespace WSArisSap.Controllers.IntegracionMaestrosController
             string I_WERKS = "")
         {
             // Validar parámetros de entrada
-            if (string.IsNullOrWhiteSpace(I_WERKS))
-            {
-                return BadRequest(new { Error = "El parámetro I_WERKS es obligatorio." });
-            }
+            //if (string.IsNullOrWhiteSpace(I_WERKS))
+            //{
+            //    return BadRequest(new { Error = "El parámetro I_WERKS es obligatorio." });
+            //}
 
             // Formatear MATNR usando el nuevo método
             string formattedMatnr = FormatMatnr(I_MARTNR);
