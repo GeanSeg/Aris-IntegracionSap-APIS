@@ -29,7 +29,17 @@ namespace WSpruebaArisSap.Controllers
     {
 
         [HttpGet("CreateOrdenInversionController")]
-        public async Task<IActionResult> GetCreateOrdenInversion(string CO_AREA, string COMP_CODE, string ORDER_TYPE,string ORDER, string FUNC_AREA_LONG, string PROFIT_CTR,string REQU_COMP_CODE, string INVEST_PROFILE,string CURRENCY,string OBJECTCLASS)
+        public async Task<IActionResult> GetCreateOrdenInversion
+            (string CO_AREA ="",
+            string COMP_CODE = "",
+            string ORDER_TYPE = "",
+            string ORDER = "",
+            string FUNC_AREA_LONG = "",
+            string PROFIT_CTR = "",
+            string REQU_COMP_CODE = "",
+            string INVEST_PROFILE = "",
+            string CURRENCY = "",
+            string OBJECTCLASS = "")
         {
             try
             {
@@ -41,7 +51,17 @@ namespace WSpruebaArisSap.Controllers
                 }
 
                 string connectionString = initializerContextSAP.InitializeContextConnSap();
+                CO_AREA = string.IsNullOrWhiteSpace(CO_AREA) ? "" : CO_AREA;
+                COMP_CODE = string.IsNullOrWhiteSpace(COMP_CODE) ? "" : COMP_CODE;
+                ORDER_TYPE = string.IsNullOrWhiteSpace(ORDER_TYPE) ? "" : ORDER_TYPE;
+                ORDER = string.IsNullOrWhiteSpace(ORDER) ? "" : ORDER;
+                FUNC_AREA_LONG = string.IsNullOrWhiteSpace(FUNC_AREA_LONG) ? "" : FUNC_AREA_LONG;
+                PROFIT_CTR = string.IsNullOrWhiteSpace(PROFIT_CTR) ? "" : PROFIT_CTR;
+                REQU_COMP_CODE = string.IsNullOrWhiteSpace(REQU_COMP_CODE) ? "" : REQU_COMP_CODE;
+                INVEST_PROFILE = string.IsNullOrWhiteSpace(INVEST_PROFILE) ? "" : INVEST_PROFILE;
+                CURRENCY = string.IsNullOrWhiteSpace(CURRENCY) ? "" : CURRENCY;
                 OBJECTCLASS = string.IsNullOrWhiteSpace(OBJECTCLASS) ? "" : OBJECTCLASS;
+
 
                 using var connection = new SapConnection(connectionString);
                 connection.Connect();

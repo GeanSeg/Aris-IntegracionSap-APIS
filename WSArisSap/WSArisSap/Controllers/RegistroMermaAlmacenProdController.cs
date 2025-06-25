@@ -14,6 +14,7 @@ namespace WSpruebaArisSap.Controllers
     {
         public class RegistroMermaItems
         {
+            public string EBELP { get; set; }
             public string MATNR { get; set; }
             public string WERKS { get; set; }
             public string LGORT { get; set; }
@@ -127,6 +128,7 @@ namespace WSpruebaArisSap.Controllers
                                 .SetField("UARIS_MOD", uarisMod))
                             .SetTable("T_DETALLE_MIGO", request.Items,
                                 (structure, item) => structure
+                                    .SetField("EBELP", item.EBELP)
                                     .SetField("MATNR", FormatMatnr(item.MATNR))
                                     .SetField("WERKS", item.WERKS)
                                     .SetField("LGORT", item.LGORT)

@@ -1,19 +1,36 @@
 ﻿using Dbosoft.YaNco;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 [ApiController]
 [Route("api/")]
 public class MovimientosHuevosIncubacionController : ControllerBase
 {
-    public class NotConsOiItem
+    public class NotConsOiItemMovimientosHuevos
     {
-        public string MATNR { get; set; }
-        public string WERKS { get; set; }
-        public string LGORT { get; set; }
-        public string CHARG { get; set; }
-        public string ENTRY_QNT { get; set; }
-        public string ENTRY_UOM { get; set; }
+        public string MATNR_DET { get; set; }
+        public string WERKS_DET { get; set; }
+        public string LGORT_DET { get; set; }
+        public string CHARG_DET { get; set; }
+        public string ENTRY_QNT_DET { get; set; }
+        public string ENTRY_UOM_DET { get; set; }
+    }
+
+    public class MovimientosHuevosRequest
+    {
+        public string MATNR_CAB { get; set; }
+        public string WERKS_CAB { get; set; }
+        public string PLWERK_CAB { get; set; }
+        public string VERID_CAB { get; set; }
+        public string BUDAT_CAB { get; set; }
+        public string BLDAT_CAB { get; set; }
+        public string REFMG_CAB { get; set; }
+        public string ERFME_CAB { get; set; }
+        public string USER_CREA_ARIS_CAB { get; set; }
+        public string USER_MODIF_ARIS_CAB { get; set; }
+        public List<NotConsOiItemMovimientosHuevos> Items { get; set; }
     }
 
     private readonly IConfiguration _configuration;
@@ -23,26 +40,43 @@ public class MovimientosHuevosIncubacionController : ControllerBase
         _configuration = configuration;
     }
 
-    [HttpPost("MovimientosHuevosIncubacion")]
-    public async Task<IActionResult> MovimientosHuevosIncubacion(
-        string MATNR_1 = "",
-        string WERKS_1 = "",
-        string PLWERK_1 = "",
-        string VERID_1 = "",
-        string BUDAT_1 = "",
-        string BLDAT_1 = "",
-        string REFMG_1 = "",
-        string ERFME_1 = "",
-        string USER_CREA_ARIS_1 = "",
-        string USER_MODIF_ARIS_1 = "",
-        string matnr = "",
-        string werks = "",
-        string lgort = "",
-        string charg = "",
-        string entry_qnt = "",
-        string entry_uom = ""
-        )
+    private string FormatMatnr(string matnrInput)
     {
+        const int matnrLength = 18;
+
+        // Si el valor es nulo o vacío, devolver cadena vacía
+        if (string.IsNullOrWhiteSpace(matnrInput))
+        {
+            return "";
+        }
+
+        string trimmedMatnr = matnrInput.Trim();
+
+        // Verificar si el valor comienza con una letra
+        if (char.IsLetter(trimmedMatnr[0]))
+        {
+            return trimmedMatnr;
+        }
+
+        // Verificar si el valor es numérico
+        if (trimmedMatnr.All(char.IsDigit))
+        {
+     
+            string formattedMatnr = trimmedMatnr.PadLeft(matnrLength, '0');
+            return formattedMatnr;
+        }
+        return trimmedMatnr;
+    }
+
+    [HttpPost("MovimientosHuevosIncubacion")]
+    public async Task<IActionResult> MovimientosHuevosIncubacion([FromBody] MovimientosHuevosRequest request)
+    {
+        // Validación de los campos obligatorios
+        if (request == null || request.Items == null || request.Items.Count == 0)
+        {
+            return BadRequest(new { Error = "La solicitud y la lista de ítems no pueden estar vacías." });
+        }
+
         string basePath = Path.Combine(AppContext.BaseDirectory, "Recursos");
         NativeLibrary.Load(Path.Combine(basePath, "icuuc50.dll"));
         NativeLibrary.Load(Path.Combine(basePath, "icudt50.dll"));
@@ -54,7 +88,7 @@ public class MovimientosHuevosIncubacionController : ControllerBase
             {"sysnr", "01"},
             {"client", "200"},
             {"user", "USU_INTEGRAC"},
-            {"passwd","Rocio*25"},
+            {"passwd", "Rocio*25"},
             {"lang", "ES"}
         };
 
@@ -65,57 +99,38 @@ public class MovimientosHuevosIncubacionController : ControllerBase
         {
             try
             {
-                MATNR_1 = string.IsNullOrEmpty(MATNR_1) ? "" : MATNR_1;
-                WERKS_1 = string.IsNullOrEmpty(WERKS_1) ? "" : WERKS_1;
-                PLWERK_1 = string.IsNullOrEmpty(PLWERK_1) ? "" : PLWERK_1;
-                VERID_1 = string.IsNullOrEmpty(VERID_1) ? "" : VERID_1;
-                BUDAT_1 = string.IsNullOrEmpty(BUDAT_1) ? "" : BUDAT_1;
-                BLDAT_1 = string.IsNullOrEmpty(BLDAT_1) ? "" : BLDAT_1;
-                REFMG_1 = string.IsNullOrEmpty(REFMG_1) ? "" : REFMG_1;
-                ERFME_1 = string.IsNullOrEmpty(ERFME_1) ? "" : ERFME_1;
-                USER_CREA_ARIS_1 = string.IsNullOrEmpty(USER_CREA_ARIS_1) ? "" : USER_CREA_ARIS_1;
-                USER_MODIF_ARIS_1 = string.IsNullOrEmpty(USER_MODIF_ARIS_1) ? "" : USER_MODIF_ARIS_1;
-                matnr = string.IsNullOrEmpty(matnr) ? "" : matnr;
-                werks = string.IsNullOrEmpty(werks) ? "" : werks;
-                lgort = string.IsNullOrEmpty(lgort) ? "" : lgort;
-                charg = string.IsNullOrEmpty(charg) ? "" : charg;
-                entry_qnt = string.IsNullOrEmpty(entry_qnt) ? "" : entry_qnt;
-                entry_uom = string.IsNullOrEmpty(entry_uom) ? "" : entry_uom;
+                // Asignación de valores predeterminados para los campos
+                string MATNR_CAB = string.IsNullOrEmpty(request.MATNR_CAB) ? "" : request.MATNR_CAB;
+                string WERKS_CAB = string.IsNullOrEmpty(request.WERKS_CAB) ? "" : request.WERKS_CAB;
+                string PLWERK_CAB = string.IsNullOrEmpty(request.PLWERK_CAB) ? "" : request.PLWERK_CAB;
+                string VERID_CAB = string.IsNullOrEmpty(request.VERID_CAB) ? "" : request.VERID_CAB;
+                string BUDAT_CAB = string.IsNullOrEmpty(request.BUDAT_CAB) ? "" : request.BUDAT_CAB;
+                string BLDAT_CAB = string.IsNullOrEmpty(request.BLDAT_CAB) ? "" : request.BLDAT_CAB;
+                string REFMG_CAB = string.IsNullOrEmpty(request.REFMG_CAB) ? "" : request.REFMG_CAB;
+                string ERFME_CAB = string.IsNullOrEmpty(request.ERFME_CAB) ? "" : request.ERFME_CAB;
+                string USER_CREA_ARIS_CAB = string.IsNullOrEmpty(request.USER_CREA_ARIS_CAB) ? "" : request.USER_CREA_ARIS_CAB;
+                string USER_MODIF_ARIS_CAB = string.IsNullOrEmpty(request.USER_MODIF_ARIS_CAB) ? "" : request.USER_MODIF_ARIS_CAB;
 
-
-                var items = new List<NotConsOiItem>
-{
-                            new NotConsOiItem
-                            {
-                                MATNR = matnr,
-                                WERKS = werks,
-                                LGORT = lgort,
-                                CHARG = charg,
-                                ENTRY_QNT = entry_qnt,
-                                ENTRY_UOM = entry_uom
-                            }
-
-                    };
-                var result = await context.CallFunction("ZPP_FM_NOTIF_CONS_ORDEN_FAB", // Ajusta el nombre si es diferente
+                // Llamada a la función de SAP
+                var result = await context.CallFunction("ZPP_FM_NOTIF_CONS_ORDEN_FAB",
                     Input: f => f.SetStructure("IST_ORDER_FAB", s => s
-                            .SetField("MATNR", MATNR_1)
-                            .SetField("WERKS", WERKS_1)
-                            .SetField("PLWERK", PLWERK_1)
-                            .SetField("VERID", VERID_1)
-                            .SetField("BUDAT", DateTime.ParseExact(BUDAT_1, "dd.MM.yyyy", null))
-                            .SetField("BLDAT", DateTime.ParseExact(BLDAT_1, "dd.MM.yyyy", null))
-                            .SetField("REFMG", string.IsNullOrWhiteSpace(REFMG_1) ? 0.000m : Convert.ToDecimal(REFMG_1, System.Globalization.CultureInfo.InvariantCulture))
-                            .SetField("ERFME", ERFME_1 == "UN" ? "ST" : ERFME_1)
-                            .SetField("USER_CREA_ARIS", USER_CREA_ARIS_1)
-                            .SetField("USER_MODIF_ARIS", USER_MODIF_ARIS_1))
-                        .SetTable("IT_COMPONENTS", items,
-                                    (structure, items) => structure
-                            .SetField("MATNR", items.MATNR)
-                            .SetField("WERKS", items.WERKS)
-                            .SetField("LGORT", items.LGORT)
-                            .SetField("CHARG", items.CHARG)
-                            .SetField("ENTRY_QNT", string.IsNullOrWhiteSpace(items.ENTRY_QNT) ? 0.000m : Convert.ToDecimal(items.ENTRY_QNT, System.Globalization.CultureInfo.InvariantCulture))
-                            .SetField("ENTRY_UOM", items.ENTRY_UOM == "UN" ? "ST" : items.ENTRY_UOM)),
+                            .SetField("MATNR", FormatMatnr(MATNR_CAB))
+                            .SetField("WERKS", WERKS_CAB)
+                            .SetField("PLWERK", PLWERK_CAB)
+                            .SetField("VERID", VERID_CAB)
+                            .SetField("BUDAT", DateTime.ParseExact(BUDAT_CAB, "dd.MM.yyyy", null))
+                            .SetField("BLDAT", DateTime.ParseExact(BLDAT_CAB, "dd.MM.yyyy", null))
+                            .SetField("REFMG", string.IsNullOrWhiteSpace(REFMG_CAB) ? 0.000m : Convert.ToDecimal(REFMG_CAB, System.Globalization.CultureInfo.InvariantCulture))
+                            .SetField("ERFME", ERFME_CAB == "UN" ? "ST" : ERFME_CAB)
+                            .SetField("USER_CREA_ARIS", USER_CREA_ARIS_CAB)
+                            .SetField("USER_MODIF_ARIS", USER_MODIF_ARIS_CAB))
+                        .SetTable("IT_COMPONENTS", request.Items, (structure, item) => structure
+                            .SetField("MATNR", item.MATNR_DET)
+                            .SetField("WERKS", item.WERKS_DET)
+                            .SetField("LGORT", item.LGORT_DET)
+                            .SetField("CHARG", item.CHARG_DET)
+                            .SetField("ENTRY_QNT", string.IsNullOrWhiteSpace(item.ENTRY_QNT_DET) ? 0.000m : Convert.ToDecimal(item.ENTRY_QNT_DET, System.Globalization.CultureInfo.InvariantCulture))
+                            .SetField("ENTRY_UOM", item.ENTRY_UOM_DET == "UN" ? "ST" : item.ENTRY_UOM_DET)),
                     Output: f => (
                         from E_NUMB_NOTIF in f.GetField<string>("E_NUMB_NOTIF")
                         from E_DOC_MATNR in f.GetField<string>("E_DOC_MATNR")

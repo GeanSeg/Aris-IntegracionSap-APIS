@@ -164,7 +164,7 @@ namespace WSpruebaArisSap.Controllers
                                 .SetField("BUDAT", parsedBudat)
                                 .SetField("BLDAT", parsedBldat)
                                 .SetField("REFMG", refmg)
-                                .SetField("ERFME", erfme)
+                                .SetField("ERFME", erfme == "UN" ? "ST" : erfme)
                                 .SetField("UARIS_CREA", uarisCrea)
                                 .SetField("UARIS_MOD", uarisMod))
                             .SetTable("IT_GOODSMOVEMENT", request.Items, (structure, item) => structure
@@ -174,7 +174,7 @@ namespace WSpruebaArisSap.Controllers
                                 .SetField("CHARG", item.CHARG)
                                 .SetField("BWART", item.BWART)
                                 .SetField("ENTRY_QNT", string.IsNullOrWhiteSpace(item.ENTRY_QNT) ? 0.000m : Convert.ToDecimal(item.ENTRY_QNT, System.Globalization.CultureInfo.InvariantCulture))
-                                .SetField("ENTRY_UOM", item.ENTRY_UOM)),
+                                .SetField("ENTRY_UOM", item.ENTRY_UOM == "UN" ? "ST" : item.ENTRY_UOM)),
                         Output: f => (
                             from E_NUMB_NOTIF in f.GetField<string>("E_NUMB_NOTIF")
                             from E_DOC_MATNR in f.GetField<string>("E_DOC_MATNR")
