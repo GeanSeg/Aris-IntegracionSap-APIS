@@ -1,4 +1,5 @@
 using Application.Interfaces;
+//using Application.SAP;
 using Application.Services;
 using Dominio.Entidad;
 using Infrastructure.Configuration;
@@ -7,6 +8,7 @@ using Infrastructure.Services;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 builder.Services.Configure<SapSettings>(
     builder.Configuration.GetSection("SapSettings"));
@@ -24,7 +26,9 @@ builder.Services.AddSingleton<ILoggingService, LoggerServicio>();
 builder.Services.AddTransient<SapResultadoPedido>();
 builder.Services.AddTransient<SapResultadoEntrega>();
 builder.Services.AddTransient<SapResultadoFactura>();
+//builder.Services.AddTransient<ObtenerMaterial>();
 
+builder.Services.AddHttpClient();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

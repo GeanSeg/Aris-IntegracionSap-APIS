@@ -40,6 +40,40 @@ namespace WSpruebaArisSap.Controllers
             _configuration = configuration;
         }
 
+        private string FormatMatnr(string matnrInput)
+        {
+            const int matnrLength = 18;
+
+            // Si el valor es nulo o vacío, devolver cadena vacía
+            if (string.IsNullOrWhiteSpace(matnrInput))
+            {
+                return "";
+            }
+
+            // Limpiar espacios en blanco
+            string trimmedMatnr = matnrInput.Trim();
+
+            // Verificar si el valor comienza con una letra
+            if (char.IsLetter(trimmedMatnr[0]))
+            {
+               
+                return trimmedMatnr;
+            }
+
+            // Verificar si el valor es numérico
+            if (trimmedMatnr.All(char.IsDigit))
+            {
+                // Formatear con ceros a la izquierda hasta 18 caracteres
+                string formattedMatnr = trimmedMatnr.PadLeft(matnrLength, '0');
+             
+                return formattedMatnr;
+            }
+
+            // Si no es numérico ni comienza con letra, devolver tal cual con log de advertencia
+           
+            return trimmedMatnr;
+        }
+
         [HttpPost("ConsumirEncasetamiento")]
         public async Task<IActionResult> CreateConsumirEncasetamiento([FromBody] ConsEncasetRequest request)
         {
@@ -104,7 +138,7 @@ namespace WSpruebaArisSap.Controllers
                                         .SetField("UARIS_MOD", uarisMod))
                                      .SetTable("IT_NOT_CONS_OI", request.Items,
                                         (structure, item) => structure
-                                            .SetField("MATNR", string.IsNullOrWhiteSpace(item.MATNR) ? "" : "0000000000" + item.MATNR)
+                                            .SetField("MATNR", FormatMatnr(item.MATNR))
                                             .SetField("WERKS", item.WERKS)
                                             .SetField("LGORT", item.LGORT)
                                             .SetField("CHARG", item.CHARG)
