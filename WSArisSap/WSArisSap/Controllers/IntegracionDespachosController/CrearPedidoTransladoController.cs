@@ -165,11 +165,11 @@ public class CrearPedidoTransladoController : ControllerBase
                                    .SetField("ZZ_LUG_ENTR", ZZ_LUG_ENTR_CAB)
                                )
 
-                        .SetTable("T_DET_PED", request.Items, (structure, item) => structure
+                        .SetTable("T_DET_PED_TR", request.Items, (structure, item) => structure
                         .SetField("EBELP", item.EBELP_DET)
-                        .SetField("MATNR", item.MATNR_DET)
+                        .SetField("MATNR", FormatMatnr( item.MATNR_DET))
                         .SetField("WERKS", item.WERKS_DET)
-                        .SetField("LGORTV", item.LGORTV_DET)
+                        .SetField("LGORT", item.LGORTV_DET)
                         .SetField("QUANTITY", item.QUANTITY_DET)
                         .SetField("PO_UNIT", item.PO_UNIT_DET)
                         .SetField("AFNAM", item.AFNAM_DET)

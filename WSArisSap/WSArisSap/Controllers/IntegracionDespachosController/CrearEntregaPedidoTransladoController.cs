@@ -25,6 +25,8 @@ public class CrearEntregaPedidoTransladoController : ControllerBase
     {
         public string EBELN_CAB { get; set; }
         public string BUDAT_CAB { get; set; }
+        public string I_CONTAB_CAB { get; set; }
+        
         public List<NotConsOiItemCrearEntregaPedidoTransladoController> Items { get; set; }
     }
 
@@ -132,19 +134,20 @@ public class CrearEntregaPedidoTransladoController : ControllerBase
                 // Asignación de valores predeterminados para los campos
                 string EBELN_CAB = string.IsNullOrEmpty(request.EBELN_CAB) ? "" : request.EBELN_CAB;
                 string BUDAT_CAB = string.IsNullOrEmpty(request.BUDAT_CAB) ? "" : request.BUDAT_CAB;
+                string I_CONTAB_CAB = string.IsNullOrEmpty(request.I_CONTAB_CAB) ? "" : request.I_CONTAB_CAB;
                 
-
                 // Llamada a la función de SAP
                 var result = await context.CallFunction("ZSD_FM_CREA_ENTREGA_PED_TRAS",
                     Input: f => f.SetStructure("ES_CAB_PED_TRAS", s => s
                                    .SetField("EBELN", EBELN_CAB)
-                                   .SetField("BUDAT", BUDAT_CAB))
+                                   .SetField("BUDAT", DateTime.ParseExact(BUDAT_CAB, "dd.MM.yyyy", null)))
+                                   .SetField("I_CONTAB", I_CONTAB_CAB)
 
                         .SetTable("IT_DET_PED_TRAS", request.Items, (structure, item) => structure
                             .SetField("EBELP", item.EBELP_DET)
                             .SetField("LGORT", item.LGORT_DET)
                             .SetField("CHARG", item.CHARG_DET)
-                            .SetField("MATERIAL", item.MATERIAL_DET)
+                            .SetField("MATERIAL", FormatMatnr(item.MATERIAL_DET))
                             .SetField("DLV_QTY", item.DLV_QTY_DET)
                             .SetField("SALES_UNIT", item.SALES_UNIT_DET)),
                     Output: f => (

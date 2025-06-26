@@ -36,35 +36,9 @@ public class CrearEntregaVentaController : ControllerBase
         _configuration = configuration;
     }
 
-    private string FormatMatnr(string matnrInput)
-    {
-        const int matnrLength = 18;
 
-        // Si el valor es nulo o vacío, devolver cadena vacía
-        if (string.IsNullOrWhiteSpace(matnrInput))
-        {
-            return "";
-        }
 
-        string trimmedMatnr = matnrInput.Trim();
-
-        // Verificar si el valor comienza con una letra
-        if (char.IsLetter(trimmedMatnr[0]))
-        {
-            return trimmedMatnr;
-        }
-
-        // Verificar si el valor es numérico
-        if (trimmedMatnr.All(char.IsDigit))
-        {
-
-            string formattedMatnr = trimmedMatnr.PadLeft(matnrLength, '0');
-            return formattedMatnr;
-        }
-        return trimmedMatnr;
-    }
-
-    private string FormatKnnr(string KnnrInput)
+    private string FormatVbeln(string KnnrInput)
     {
         const int knnrLength = 10;
 
@@ -139,9 +113,9 @@ public class CrearEntregaVentaController : ControllerBase
                 // Llamada a la función de SAP
                 var result = await context.CallFunction("ZSD_FM_CREA_ENTREGA",
                     Input: f => f.SetStructure("ES_CAB_DESPA", s => s
-                                   .SetField("DATBI", DATBI_CAB)
-                                   .SetField("VBELN", VBELN_CAB)
-                                   .SetField("BUDAT", BUDAT_CAB))
+                                   .SetField("DATBI", DateTime.ParseExact(DATBI_CAB, "dd.MM.yyyy", null))
+                                   .SetField("VBELN", FormatVbeln(VBELN_CAB))
+                                   .SetField("BUDAT", DateTime.ParseExact(DATBI_CAB, "dd.MM.yyyy", null)))
                         .SetTable("T_DET_DESP", request.Items, (structure, item) => structure
                             .SetField("POSNR", item.POSNR_DET)
                             .SetField("KWMENG", item.KWMENG_DET)
