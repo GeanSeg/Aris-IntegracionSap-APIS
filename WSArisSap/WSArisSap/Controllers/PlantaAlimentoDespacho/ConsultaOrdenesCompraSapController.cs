@@ -20,6 +20,9 @@ namespace WSArisSap.Controllers.PlantaAlimentoDespachoSap
         {
             try
             {
+                ConsultaOrdenesCompraResult consultaOrdenesCompraResult;
+                consultaOrdenesCompraResult = new ConsultaOrdenesCompraResult();
+
                 loggingService.LogInfo("ConsultaOrdenesCompraSap : Inicializando Librería");
 
                 bool resLibraryInitializer = libraryInitializer.InitializeLibrary();
@@ -48,10 +51,45 @@ namespace WSArisSap.Controllers.PlantaAlimentoDespachoSap
                     I_NRO_PEDIDO = string.IsNullOrEmpty(consultaOrdenesCompra.I_NRO_PEDIDO) ? "" : consultaOrdenesCompra.I_NRO_PEDIDO,
                     I_SOCIEDAD = string.IsNullOrEmpty(consultaOrdenesCompra.I_SOCIEDAD) ? "" : consultaOrdenesCompra.I_SOCIEDAD
 
-                }); 
+                });
+
+                consultaOrdenesCompraResult = result;
 
                 loggingService.LogInfo("ConsultaOrdenesCompraSap : Fin Consumiendo RFC ZMM_FM_CONSULTA_PEDIDO");
-                return Ok(result);
+
+                if (string.IsNullOrEmpty(consultaOrdenesCompra.VC_CLASE_DOCUMENTO))
+                {
+                    var consultaOrdenesCompraFiltro = new ConsultaOrdenesCompraResult
+                    {
+                        ET_CABECERA = consultaOrdenesCompraResult.ET_CABECERA,
+                        ET_DETALLE = consultaOrdenesCompraResult.ET_DETALLE,
+                        ET_RETURN = consultaOrdenesCompraResult.ET_RETURN,
+                    };
+                    return Ok(consultaOrdenesCompraFiltro);
+                }
+                else
+                {
+                    var ebelnsCabecera = consultaOrdenesCompraResult.ET_CABECERA
+                    .Where(c => string.IsNullOrEmpty(consultaOrdenesCompra.VC_CLASE_DOCUMENTO) || c.BSART == consultaOrdenesCompra.VC_CLASE_DOCUMENTO.ToUpper())
+                    .Select(c => c.EBELN)
+                    .ToHashSet();
+
+                    var consultaOrdenesCompraFiltro = new ConsultaOrdenesCompraResult
+                    {
+                        ET_CABECERA = consultaOrdenesCompraResult.ET_CABECERA
+                            .Where(c => string.IsNullOrEmpty(consultaOrdenesCompra.VC_CLASE_DOCUMENTO) || c.BSART == consultaOrdenesCompra.VC_CLASE_DOCUMENTO.ToUpper())
+                            .ToArray(),
+
+                        ET_DETALLE = consultaOrdenesCompraResult.ET_DETALLE
+                            .Where(d => ebelnsCabecera.Contains(d.EBELN))
+                            .ToArray(),
+
+                        ET_RETURN = consultaOrdenesCompraResult.ET_RETURN
+                    };
+
+                    return Ok(consultaOrdenesCompraFiltro);
+                }
+
             }
 
             catch (Exception ex)

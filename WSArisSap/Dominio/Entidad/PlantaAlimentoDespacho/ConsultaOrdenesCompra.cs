@@ -11,6 +11,7 @@ namespace Domain.Entidad.PlantaAlimentoDespacho
     {
         public string I_FEC_CREA_INICIO { get; set; }
         public string I_FEC_CREA_FIN { get; set; }
+        public string VC_CLASE_DOCUMENTO { get; set; }
         public string I_NRO_PEDIDO { get; set; }
         public string I_SOCIEDAD { get; set; }
     }
