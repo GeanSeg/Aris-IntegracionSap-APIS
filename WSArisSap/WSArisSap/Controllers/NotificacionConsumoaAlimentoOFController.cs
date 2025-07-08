@@ -37,6 +37,74 @@ namespace WSpruebaArisSap.Controllers
         {
             _configuration = configuration;
         }
+        private string FormatMatnr(string matnrInput)
+        {
+            const int matnrLength = 18;
+
+            // Si el valor es nulo o vacío, devolver cadena vacía
+            if (string.IsNullOrWhiteSpace(matnrInput))
+            {
+                return "";
+            }
+
+            // Limpiar espacios en blanco
+            string trimmedMatnr = matnrInput.Trim();
+
+            // Verificar si el valor comienza con una letra
+            if (char.IsLetter(trimmedMatnr[0]))
+            {
+
+                return trimmedMatnr;
+            }
+
+            // Verificar si el valor es numérico
+            if (trimmedMatnr.All(char.IsDigit))
+            {
+                // Formatear con ceros a la izquierda hasta 18 caracteres
+                string formattedMatnr = trimmedMatnr.PadLeft(matnrLength, '0');
+
+                return formattedMatnr;
+            }
+
+            // Si no es numérico ni comienza con letra, devolver tal cual con log de advertencia
+
+            return trimmedMatnr;
+        }
+
+        private string FormatAufnr(string AufnrInput)
+        {
+            const int AufnrLength = 12;
+
+            // Si el valor es nulo o vacío, devolver cadena vacía
+            if (string.IsNullOrWhiteSpace(AufnrInput))
+            {
+                return "";
+            }
+
+            // Limpiar espacios en blanco
+            string trimmedAufnr = AufnrInput.Trim();
+
+            // Verificar si el valor comienza con una letra
+            if (char.IsLetter(trimmedAufnr[0]))
+            {
+
+                return trimmedAufnr;
+            }
+
+            // Verificar si el valor es numérico
+            if (trimmedAufnr.All(char.IsDigit))
+            {
+                // Formatear con ceros a la izquierda hasta 18 caracteres
+                string formattedAufnr = trimmedAufnr.PadLeft(AufnrLength, '0');
+
+                return formattedAufnr;
+            }
+
+            // Si no es numérico ni comienza con letra, devolver tal cual con log de advertencia
+
+            return trimmedAufnr;
+        }
+
 
         [HttpPost("NotificacionConsumoaAlimentoOFController")]
         public async Task<IActionResult> CreateOrdenInversion([FromBody] NotConsOiRequest request)
@@ -84,12 +152,12 @@ namespace WSpruebaArisSap.Controllers
                         Input: f => f.SetStructure("ES_CAB_NOT_CONS_OF", s => s
                                         .SetField("BUDAT", DateTime.ParseExact(budat, "dd.MM.yyyy", null))
                                         .SetField("BLDAT", DateTime.ParseExact(bldat, "dd.MM.yyyy", null))
-                                        .SetField("AUFNR", aufnr)
+                                        .SetField("AUFNR", FormatAufnr(aufnr))
                                         .SetField("UARIS_CREA", uarisCrea)
                                         .SetField("UARIS_MOD", uarisMod))
                                      .SetTable("IT_POS_NOT_CONS_OF", request.Items,
                                         (structure, item) => structure
-                                            .SetField("MATNR", item.MATNR)
+                                            .SetField("MATNR", FormatMatnr(item.MATNR))
                                             .SetField("WERKS", item.WERKS)
                                             .SetField("LGORT", item.LGORT)
                                             .SetField("CHARG", item.CHARG)
