@@ -69,15 +69,22 @@ namespace WSArisSap.Controllers.PlantaAlimentoDespachoSap
                 }
                 else
                 {
+                    var clasesDocumento = string.IsNullOrWhiteSpace(consultaOrdenesCompra.VC_CLASE_DOCUMENTO)
+                        ? new List<string>() 
+                        : consultaOrdenesCompra.VC_CLASE_DOCUMENTO
+                            .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                            .Select(c => c.Trim().ToUpper())
+                            .ToList();
+
                     var ebelnsCabecera = consultaOrdenesCompraResult.ET_CABECERA
-                    .Where(c => string.IsNullOrEmpty(consultaOrdenesCompra.VC_CLASE_DOCUMENTO) || c.BSART == consultaOrdenesCompra.VC_CLASE_DOCUMENTO.ToUpper())
-                    .Select(c => c.EBELN)
-                    .ToHashSet();
+                        .Where(c => !clasesDocumento.Any() || clasesDocumento.Contains(c.BSART.ToUpper()))
+                        .Select(c => c.EBELN)
+                        .ToHashSet();
 
                     var consultaOrdenesCompraFiltro = new ConsultaOrdenesCompraResult
                     {
                         ET_CABECERA = consultaOrdenesCompraResult.ET_CABECERA
-                            .Where(c => string.IsNullOrEmpty(consultaOrdenesCompra.VC_CLASE_DOCUMENTO) || c.BSART == consultaOrdenesCompra.VC_CLASE_DOCUMENTO.ToUpper())
+                            .Where(c => !clasesDocumento.Any() || clasesDocumento.Contains(c.BSART.ToUpper()))
                             .ToArray(),
 
                         ET_DETALLE = consultaOrdenesCompraResult.ET_DETALLE
