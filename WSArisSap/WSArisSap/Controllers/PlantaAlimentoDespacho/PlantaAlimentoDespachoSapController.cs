@@ -16,7 +16,7 @@ namespace WSArisSap.Controllers.PlantaAlimentoDespachoSap
         ): Controller
     {
         [HttpPost("PlantaAlimentoDespacho")]
-        public IActionResult PlantaAlimentoDespachoSap([FromBody] PlantaAlimentoDespacho plantaAlimentoDespacho)
+        public IActionResult PlantaAlimentoDespachoSap([FromBody] PlantaAlimentoDespachoEntity plantaAlimentoDespacho)
         {
             try
             {

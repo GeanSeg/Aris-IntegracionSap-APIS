@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entidad.PlantaAlimentoDespacho
 {
-        public class PlantaAlimentoDespacho
+        public class PlantaAlimentoDespachoEntity
         {
             public string BUDAT { get; set; }
             public string BLDAT { get; set; }
