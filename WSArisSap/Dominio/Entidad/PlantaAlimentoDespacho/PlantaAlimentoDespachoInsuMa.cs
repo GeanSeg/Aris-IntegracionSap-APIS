@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using SapNwRfc;
+﻿using SapNwRfc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +9,6 @@ namespace Domain.Entidad.PlantaAlimentoDespacho
 {
     public class PlantaAlimentoDespachoInsuMa
     {
-        [JsonProperty("FECHA_RECEPCION")]
         public string FECHA_RECEPCION { get; set; }
         public string FECHA_TRANSFERENCIA { get; set; }
         public string CLASE_MOVIMIENTO { get; set; }
