@@ -16,7 +16,7 @@ public class CrearEntregaPedidoTransladoController : ControllerBase
         public string EBELP_DET       { get; set; }
         public string LGORT_DET       { get; set; }
         public string CHARG_DET       { get; set; }
-        public string MATERIAL_DET    { get; set; }
+        //public string MATERIAL_DET    { get; set; }
         public string DLV_QTY_DET     { get; set; }
         public string SALES_UNIT_DET { get; set; }
     }
@@ -147,7 +147,7 @@ public class CrearEntregaPedidoTransladoController : ControllerBase
                             .SetField("EBELP", item.EBELP_DET)
                             .SetField("LGORT", item.LGORT_DET)
                             .SetField("CHARG", item.CHARG_DET)
-                            .SetField("MATERIAL", FormatMatnr(item.MATERIAL_DET))
+                            //.SetField("MATERIAL", FormatMatnr(item.MATERIAL_DET))
                             .SetField("DLV_QTY", item.DLV_QTY_DET)
                             .SetField("SALES_UNIT", item.SALES_UNIT_DET)),
                     Output: f => (
