@@ -119,7 +119,7 @@ public class CrearEntregaVentaController : ControllerBase
                         .SetTable("T_DET_DESP", request.Items, (structure, item) => structure
                             .SetField("POSNR", item.POSNR_DET)
                             .SetField("KWMENG", item.KWMENG_DET)
-                            .SetField("VRKME", item.VRKME_DET)
+                            .SetField("VRKME", item.VRKME_DET == "UN" ? "ST" : item.VRKME_DET)
                             .SetField("CHARG", item.CHARG_DET)),
 
 
@@ -167,7 +167,7 @@ public class CrearEntregaVentaController : ControllerBase
                     )
                 );
 
-                return Ok(new { Data = result.Case });
+               return Ok(new { Data = result.Case });
             }
             catch (Exception ex)
             {
