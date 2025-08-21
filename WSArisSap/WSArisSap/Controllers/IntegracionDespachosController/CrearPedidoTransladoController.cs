@@ -171,7 +171,7 @@ public class CrearPedidoTransladoController : ControllerBase
                         .SetField("WERKS", item.WERKS_DET)
                         .SetField("LGORT", item.LGORTV_DET)
                         .SetField("QUANTITY", item.QUANTITY_DET)
-                        .SetField("PO_UNIT", item.PO_UNIT_DET)
+                        .SetField("PO_UNIT", item.PO_UNIT_DET == "UN" ? "ST" : item.PO_UNIT_DET)
                         .SetField("AFNAM", item.AFNAM_DET)
                         .SetField("DEL_DATCAT_EXT", item.DEL_DATCAT_EXT_DET)
                         .SetField("DELIVERY_DATE", item.DELIVERY_DATE_DET)

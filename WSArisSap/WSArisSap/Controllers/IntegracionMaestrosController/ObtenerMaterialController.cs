@@ -22,11 +22,18 @@ namespace WSArisSap.Controllers.IntegracionMaestrosController
 
         [HttpGet("ObtenerMaterialController")]
         public async Task<IActionResult> GetObtenerMaterial(
-     string? I_BUKRS = null,
-     string? I_FECCREA_I = null,
-     string? I_FECCREA_F = null,
-     string? I_FECMOD_I = null,
-     string? I_FECMOD_F = null)
+         string? I_BUKRS = null, 
+         string? I_MTART = null,
+         string? I_MATKL = null,
+         string I_WERKS = "",
+         string? I_LGORT = null,
+         string? I_MATNR = null,
+         string? I_MAKTX = null,
+         string? I_XCHPF = null,
+         string? I_FECCREA_I = null,
+         string? I_FECCREA_F = null,
+         string? I_FECMOD_I = null,
+         string? I_FECMOD_F = null)
         {
             string basePath = Path.Combine(AppContext.BaseDirectory, "Recursos");
             NativeLibrary.Load(Path.Combine(basePath, "icuuc50.dll"));
@@ -53,8 +60,20 @@ namespace WSArisSap.Controllers.IntegracionMaestrosController
                     var result = await context.CallFunction("ZMM_FM_MIGR_MATERIAL_DATA",
                         Input: f =>
                         {
+                            
                             f.SetField("I_BUKRS", I_BUKRS ?? "");
-
+                            f.SetField("I_MTART", I_MTART ?? ""); 
+                            f.SetField("I_MATKL", I_MATKL ?? "");
+                            if (!string.IsNullOrEmpty(I_WERKS))
+                            {
+                                f.SetTable("I_WERKS", new string[] { I_WERKS },
+                                    (structure, werksValue) => structure
+                                        .SetField("WERKS", werksValue));
+                            }
+                            f.SetField("I_LGORT", I_LGORT ?? "");
+                            f.SetField("I_MATNR", I_MATNR ?? "");
+                            f.SetField("I_MAKTX", I_MAKTX ?? "");
+                            f.SetField("I_XCHPF", I_XCHPF ?? "");
                             DateTime? ParseDate(string? dateStr)
                             {
                                 return string.IsNullOrWhiteSpace(dateStr)
@@ -96,7 +115,7 @@ namespace WSArisSap.Controllers.IntegracionMaestrosController
                                     MAKTX,
                                     WERKS,
                                     LGORT,
-                                    MEINS,
+                                    MEINS = MEINS == "ST" ? "UN" : MEINS,
                                     GEWEI,
                                     MENGE,
                                     MATKL,
