@@ -37,6 +37,7 @@ public class CrearPedidoTransladoController : ControllerBase
         public string BKGRP_CAB { get; set; }
         public string RESWK_CAB { get; set; }
         public string ZZ_LUG_ENTR_CAB { get; set; }
+        public string ZZ_MOT_TRAS_CAB { get; set; }
         public List<NotConsOiItemCrearPedidoTranslado> Items { get; set; }
     }
 
@@ -151,7 +152,7 @@ public class CrearPedidoTransladoController : ControllerBase
                 string BKGRP_CAB = string.IsNullOrEmpty(request.BKGRP_CAB) ? "" : request.BKGRP_CAB;
                 string RESWK_CAB = string.IsNullOrEmpty(request.RESWK_CAB) ? "" : request.RESWK_CAB;
                 string ZZ_LUG_ENTR_CAB = string.IsNullOrEmpty(request.ZZ_LUG_ENTR_CAB) ? "" : request.ZZ_LUG_ENTR_CAB;
-
+                string ZZ_MOT_TRAS_CAB = string.IsNullOrEmpty(request.ZZ_MOT_TRAS_CAB) ? "" : request.ZZ_MOT_TRAS_CAB;
 
                 // Llamada a la función de SAP
                 var result = await context.CallFunction("ZSD_FM_CREA_PED_TRAS",
@@ -163,6 +164,7 @@ public class CrearPedidoTransladoController : ControllerBase
                                    .SetField("BKGRP", BKGRP_CAB)
                                    .SetField("RESWK", RESWK_CAB)
                                    .SetField("ZZ_LUG_ENTR", ZZ_LUG_ENTR_CAB)
+                                   .SetField("ZZ_MOT_TRAS", ZZ_MOT_TRAS_CAB)
                                )
 
                         .SetTable("T_DET_PED_TR", request.Items, (structure, item) => structure

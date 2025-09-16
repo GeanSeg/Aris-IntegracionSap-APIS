@@ -62,7 +62,8 @@ namespace WSArisSap.Controllers.IntegracionMaestrosController
             string I_MARTNR = "",
             string I_MTART = "",
             string I_BUKRS = "",
-            string I_WERKS = "")
+            string I_WERKS = "",
+            string I_LGORT = "")
         {
             // Validar parámetros de entrada
             //if (string.IsNullOrWhiteSpace(I_WERKS))
@@ -109,6 +110,7 @@ namespace WSArisSap.Controllers.IntegracionMaestrosController
                             //string.IsNullOrWhiteSpace(I_MARTNR) ? "" : I_MARTNR.PadLeft(18, '0'))
                             .SetField("I_MTART", string.IsNullOrWhiteSpace(I_MTART) ? "" : I_MTART)
                             .SetField("I_BUKRS", string.IsNullOrWhiteSpace(I_BUKRS) ? "" : I_BUKRS)
+                            .SetField("I_LGORT", string.IsNullOrWhiteSpace(I_LGORT) ? "" : I_LGORT)
                             .SetTable("I_WERKS", new string[] { I_WERKS },
                                 (structure, werksValue) => structure
                                     .SetField("WERKS", string.IsNullOrWhiteSpace(werksValue) ? "" : werksValue)),

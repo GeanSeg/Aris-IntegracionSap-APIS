@@ -109,6 +109,8 @@ namespace WSArisSap.Controllers.IntegracionMaestrosController
                                 from XCHPF_C in s.GetField<string>("XCHPF_C")
                                 from PRICE_UN in s.GetField<string>("PRICE_UN")
                                 from WAERS in s.GetField<string>("WAERS")
+                                from PRCTR in s.GetField<string>("PRCTR")
+
                                 select new
                                 {
                                     MATNR,
@@ -124,7 +126,8 @@ namespace WSArisSap.Controllers.IntegracionMaestrosController
                                     XCHPF,
                                     XCHPF_C,
                                     PRICE_UN,
-                                    WAERS
+                                    WAERS,
+                                    PRCTR
                                 })
                             from T_RETURN in f.MapTable("T_RETURN", s =>
                                   from TYPE in s.GetField<string>("TYPE")

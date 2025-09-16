@@ -87,6 +87,7 @@ namespace WSpruebaArisSap.Controllers
                         from FEC_MODIF in s.GetField<string>("FEC_MODIF")
                         from USU_MODIF in s.GetField<string>("USU_MODIF")
                         from ZZ_LUG_ENTR in s.GetField<string>("ZZ_LUG_ENTR")
+                        from ZZ_MOT_TRAS in s.GetField<string>("ZZ_MOT_TRAS")
                         from CAMPO_NO_UTILIZADO in s.GetField<string>("CAMPO_NO_UTILIZADO")
                         from SUMINISTRO_COMPLETO in s.GetField<string>("SUMINISTRO_COMPLETO")
                         from MENSAJE_EM in s.GetField<string>("MENSAJE_EM")
@@ -104,6 +105,7 @@ namespace WSpruebaArisSap.Controllers
                             FEC_MODIF,
                             USU_MODIF,
                             ZZ_LUG_ENTR,
+                            ZZ_MOT_TRAS,
                             CAMPO_NO_UTILIZADO,
                             SUMINISTRO_COMPLETO,
                             MENSAJE_EM,
