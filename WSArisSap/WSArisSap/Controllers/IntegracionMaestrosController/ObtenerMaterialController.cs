@@ -40,15 +40,18 @@ namespace WSArisSap.Controllers.IntegracionMaestrosController
             NativeLibrary.Load(Path.Combine(basePath, "icudt50.dll"));
             NativeLibrary.Load(Path.Combine(basePath, "icuin50.dll"));
 
+            var sapSettings = _configuration.GetSection("SapSettings");
+
             var settings = new Dictionary<string, string>
-    {
-        {"ashost", "10.45.4.163"},
-        {"sysnr", "01"},
-        {"client", "200"},
-        {"user", "USU_INTEGRAC"},
-        {"passwd","Rocio*25"},
-        {"lang", "EN"}
-    };
+            {
+                {"ashost", sapSettings["AppServerHost"]},
+                {"sysnr", sapSettings["SystemNumber"]},
+                {"client", sapSettings["Client"]},
+                {"user", sapSettings["User"]},
+                {"passwd", sapSettings["Password"]},
+                {"lang", sapSettings["Language"]}
+            };
+
 
             var connectionBuilder = new ConnectionBuilder(settings);
             var connFunc = connectionBuilder.Build();

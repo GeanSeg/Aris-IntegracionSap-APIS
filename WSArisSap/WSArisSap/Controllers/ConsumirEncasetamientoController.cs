@@ -106,14 +106,16 @@ namespace WSpruebaArisSap.Controllers
             NativeLibrary.Load(Path.Combine(basePath, "icudt50.dll"));
             NativeLibrary.Load(Path.Combine(basePath, "icuin50.dll"));
 
+            var sapSettings = _configuration.GetSection("SapSettings");
+
             var settings = new Dictionary<string, string>
             {
-                {"ashost", _configuration["SAP:ASHOST"] ?? "10.45.4.163"},
-                {"sysnr", _configuration["SAP:SYSNR"] ?? "01"},
-                {"client", _configuration["SAP:CLIENT"] ?? "200"},
-                {"user", _configuration["SAP:USER"] ?? "USU_INTEGRAC"},
-                {"passwd", _configuration["SAP:PASSWD"] ?? "Rocio*25"},
-                {"lang", _configuration["SAP:LANG"] ?? "ES"}
+                {"ashost", sapSettings["AppServerHost"]},
+                {"sysnr", sapSettings["SystemNumber"]},
+                {"client", sapSettings["Client"]},
+                {"user", sapSettings["User"]},
+                {"passwd", sapSettings["Password"]},
+                {"lang", sapSettings["Language"]}
             };
 
             var connectionBuilder = new ConnectionBuilder(settings);
