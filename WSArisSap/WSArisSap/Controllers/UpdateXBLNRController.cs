@@ -1,11 +1,9 @@
 ﻿using Application.Interfaces;
-using Domain.Entidad;
 using Domain.Entidad.UpdateXBLNR;
-using Dominio.Entidad;
 using Microsoft.AspNetCore.Mvc;
 using SapNwRfc;
 
-namespace WSpruebaArisSap.Controllers.UpdateXBLNRC
+namespace WSpruebaArisSap.Controllers.UpdateXBLNRController
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -35,18 +33,18 @@ namespace WSpruebaArisSap.Controllers.UpdateXBLNRC
                 using var connection = new SapConnection(connectionString);
                 connection.Connect();
 
-                loggingService.LogInfo("UpdateXBLNR : Consumiendo RFC UPDATE_XBLNR_IN_LIKP");
+                loggingService.LogInfo("UpdateXBLNR : Consumiendo RFC ZFM_SD_UPDATE_XBLNR_IN_LIKP");
 
-                using var someFunction = connection.CreateFunction("UPDATE_XBLNR_IN_LIKP");
+                using var someFunction = connection.CreateFunction("ZFM_SD_UPDATE_XBLNR_IN_LIKP");
 
-                 someFunction.Invoke(new UpdateXBLNR_Parameters
+                 var result =  someFunction.Invoke<UpdateXBLNR_Result>(new UpdateXBLNR_Parameters
                 {
-                   I_VBELN= updateXBLNR.I_VBELN,
+                   I_VBELN= updateXBLNR.I_VBELN.PadLeft(10,'0'),
                    I_XBLNR=updateXBLNR.I_XBLNR
                  });
 
-                loggingService.LogInfo("UpdateXBLNR : Fin Consumiendo RFC UPDATE_XBLNR_IN_LIKP");
-                return Ok($"El RFC se ejecutó con éxito I_VBELN=> {updateXBLNR.I_VBELN} I_XBLNR=> {updateXBLNR.I_XBLNR}");
+                loggingService.LogInfo("UpdateXBLNR : Fin Consumiendo RFC ZFM_SD_UPDATE_XBLNR_IN_LIKP");
+                return Ok(result);
             }
 
             catch (Exception ex)

@@ -22,4 +22,28 @@ namespace Domain.Entidad.UpdateXBLNR
         [SapName("I_XBLNR")]
         public string? I_XBLNR { get; set; }
     }
+
+    public class UpdateXBLNR_Result 
+    {
+        [SapName("T_RETURN")]
+        public UpdateXBLNR_ResultItems[] T_RETURN { get; set; }
+    }
+
+    public class UpdateXBLNR_ResultItems
+    {
+        [SapName("TYPE")]
+        public string TYPE { get; set; }
+
+        [SapName("ID")]
+        public string ID { get; set; }
+
+        [SapName("NUMBER")]
+        public string NUMBER { get; set; }
+
+        [SapName("MESSAGE")]
+        public string MESSAGE { get; set; }
+    }
+
+
+
 }
