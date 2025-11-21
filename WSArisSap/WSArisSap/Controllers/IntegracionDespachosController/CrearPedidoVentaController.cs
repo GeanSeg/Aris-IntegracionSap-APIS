@@ -42,6 +42,7 @@ public class CrearPedidoVentaController : ControllerBase
         public string AUGRU_CAB { get; set; }
         public string BZIRK_CAB { get; set; }
         public string KUNNR_CAB { get; set; }
+        public string KUNWE_CAB { get; set; }
         public string NUM_PED_ARIS_CAB { get; set; }
         public string USER_CREA_ARIS_CAB { get; set; }
         public string CREA_ORG_ARIS_CAB { get; set; }
@@ -169,6 +170,7 @@ public class CrearPedidoVentaController : ControllerBase
                 string AUGRU_CAB = string.IsNullOrEmpty(request.AUGRU_CAB) ? "" : request.AUGRU_CAB;
                 string BZIRK_CAB = string.IsNullOrEmpty(request.BZIRK_CAB) ? "" : request.BZIRK_CAB;
                 string KUNNR_CAB = string.IsNullOrEmpty(request.KUNNR_CAB) ? "" : request.KUNNR_CAB;
+                string KUNWE_CAB = string.IsNullOrEmpty(request.KUNWE_CAB) ? "" : request.KUNWE_CAB;
                 string NUM_PED_ARIS_CAB = string.IsNullOrEmpty(request.NUM_PED_ARIS_CAB) ? "" : request.NUM_PED_ARIS_CAB;
                 string USER_CREA_ARIS_CAB = string.IsNullOrEmpty(request.USER_CREA_ARIS_CAB) ? "" : request.USER_CREA_ARIS_CAB;
                 string CREA_ORG_ARIS_CAB = string.IsNullOrEmpty(request.CREA_ORG_ARIS_CAB) ? "" : request.CREA_ORG_ARIS_CAB;
@@ -194,6 +196,7 @@ public class CrearPedidoVentaController : ControllerBase
                                    .SetField("AUGRU", AUGRU_CAB)
                                    .SetField("BZIRK", BZIRK_CAB)
                                    .SetField("KUNNR", FormatKnnr(KUNNR_CAB))
+                                   .SetField("KUNWE", FormatKnnr(KUNWE_CAB))
                                    .SetField("NUM_PED_ARIS", NUM_PED_ARIS_CAB)
                                    .SetField("USER_CREA_ARIS", USER_CREA_ARIS_CAB)
                                    .SetField("CREA_ORG_ARIS", CREA_ORG_ARIS_CAB)
